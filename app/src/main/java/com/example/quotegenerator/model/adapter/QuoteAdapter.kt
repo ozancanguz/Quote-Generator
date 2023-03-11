@@ -10,33 +10,35 @@ import com.example.quotegenerator.model.data.Quote
 import com.example.quotegenerator.model.data.QuoteItem
 import kotlinx.android.synthetic.main.quote_row_layout.view.*
 
-class QuoteAdapter:RecyclerView.Adapter<QuoteAdapter.QuoteViewHolder>() {
-    class QuoteViewHolder(view: View):RecyclerView.ViewHolder(view){
+class QuoteAdapter(): RecyclerView.Adapter<QuoteAdapter.QuoteViewHolder>() {
 
+    var quoteList=emptyList<QuoteItem>
+    inner class QuoteViewHolder(private val binding: QuoteRowLayoutBinding):RecyclerView.ViewHolder(binding.root) {
+        fun bind(quoteItem: QuoteItem) {
+            binding.quoteText.text = quoteItem.text
+            binding.quoteAuthor.text = quoteItem.author
+        }
     }
 
-    var quoteList= emptyList<QuoteItem>()
-
-    fun setData(newData: Quote){
+    fun setData(newData:Quote){
         this.quoteList=newData
         notifyDataSetChanged()
     }
 
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuoteViewHolder {
-       val inflater=LayoutInflater.from(parent.context)
-        val view=inflater.inflate(R.layout.quote_row_layout,parent,false)
-        return QuoteViewHolder(view)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = QuoteRowLayoutBinding.inflate(inflater, parent, false)
+        return QuoteViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
-        return  quoteList.size
+        return quoteList.size
     }
 
     override fun onBindViewHolder(holder: QuoteViewHolder, position: Int) {
-        var currentQuote=quoteList[position]
-        holder.itemView.quote_text.text=currentQuote.text
-        holder.itemView.quote_author.text=currentQuote.author
+        val currentQuote = quoteList[position]
+        holder.bind(currentQuote)
     }
-
 }
